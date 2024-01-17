@@ -22,14 +22,25 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Fetch data from Firestore
-const gamesCol = collection(db, 'games');
-const gamesSnapshot = await getDocs(gamesCol);
-const games = gamesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+// Fetch data from Firestore for games
+let games = [];
+try {
+  const gamesCol = collection(db, 'games');
+  const gamesSnapshot = await getDocs(gamesCol);
+  games = gamesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+} catch (error) {
+  console.error('Error fetching games:', error);
+}
 
-const BlogsCol = collection(db, 'blogs');
-const BlogsSnapshot = await getDocs(BlogsCol);
-const blogs = BlogsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+// Fetch data from Firestore for blogs
+let blogs = [];
+try {
+  const blogsCol = collection(db, 'blogs');
+  const blogsSnapshot = await getDocs(blogsCol);
+  blogs = blogsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+} catch (error) {
+  console.error('Error fetching blogs:', error);
+}
 
 // Resolvers
 const resolvers = {
